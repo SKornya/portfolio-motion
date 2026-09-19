@@ -90,6 +90,32 @@
 }
 
 @media (max-width: 720px) {
+  .button {
+    border-color: transparent;
+  }
+
+  .button::before {
+    opacity: 1;
+    transform: scale(1);
+    padding: 1px;
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: gradient-shift 5s ease-in-out infinite;
+  }
+
+  .button:hover,
+  .button:focus-visible {
+    transform: none;
+  }
+
+  .button:disabled::before {
+    opacity: 0;
+    animation: none;
+  }
+
   .lg {
     font-size: 20px;
     min-width: 180px;
@@ -99,5 +125,12 @@
   .sm {
     font-size: 16px;
     min-width: 140px;
+  }
+}
+
+@media (max-width: 720px) and (prefers-reduced-motion: reduce) {
+  .button::before {
+    animation: none;
+    background-position: 50% 50%;
   }
 }
