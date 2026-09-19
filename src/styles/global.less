@@ -16,11 +16,22 @@
   padding: 0;
 }
 
+:root {
+  /* JS syncs to visualViewport px; dvh is the CSS fallback before/without JS */
+  --app-height: 100dvh;
+}
+
+@supports not (height: 100dvh) {
+  :root {
+    --app-height: 100vh;
+  }
+}
+
 html,
 body,
 #root {
   width: 100%;
-  height: 100%;
+  height: var(--app-height);
   overflow: hidden;
 }
 

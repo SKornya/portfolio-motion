@@ -91,21 +91,24 @@
 
 @media (max-width: 720px) {
   .drawer {
-    height: min(72vh, 640px);
+    height: auto;
+    max-height: min(68vh, 520px);
   }
 
   .panel {
-    padding: 24px 20px 12px;
+    height: auto;
+    padding: 20px 20px 10px;
+    padding-bottom: max(10px, env(safe-area-inset-bottom, 0px));
     border-radius: 28px 28px 0 0;
   }
 
   .grid {
     grid-template-columns: 1fr;
-    gap: 24px;
+    gap: 16px;
   }
 
   .heading {
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     font-size: 18px;
   }
 
@@ -115,17 +118,19 @@
   }
 
   .qrs {
-    gap: 16px;
-    margin-top: 16px;
+    gap: 14px;
+    margin-top: 12px;
   }
 
   .icons {
+    margin-top: 14px;
+    padding-top: 0;
     gap: 6px;
     overflow: hidden;
   }
 
   .icon {
-    width: min(72px, 14vw);
+    width: min(64px, 13vw);
   }
 
   .icon:nth-child(n + 5) {

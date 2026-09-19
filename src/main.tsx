@@ -1,7 +1,10 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
+import { syncAppHeight } from './fullpage/appHeight';
 import './styles/global.less';
+
+syncAppHeight();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

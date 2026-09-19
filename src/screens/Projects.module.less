@@ -18,7 +18,7 @@
 .stage {
   position: relative;
   width: min(1120px, calc(100% - 80px));
-  height: min(620px, calc(100vh - 210px));
+  height: min(620px, calc(var(--app-height) - 210px));
   perspective: 1600px;
 }
 
@@ -57,23 +57,23 @@
   .screen {
     justify-content: flex-start;
     padding-top: calc(100px + clamp(48px, 11vw, 120px) + 48px);
-    padding-bottom: 24px;
+    padding-bottom: max(24px, env(safe-area-inset-bottom, 0px));
   }
 
   .stage {
     width: calc(100% - 40px);
-    height: calc(100vh - 100px - clamp(48px, 11vw, 120px) - 72px);
+    height: calc(var(--app-height) - 100px - clamp(48px, 11vw, 120px) - 72px);
   }
 }
 
 @media (max-width: 720px) {
   .screen {
     padding-top: calc(72px + 52px + 16px);
-    padding-bottom: 16px;
+    padding-bottom: max(20px, env(safe-area-inset-bottom, 0px));
   }
 
   .stage {
     width: calc(100% - 24px);
-    height: calc(100vh - 72px - 52px - 32px);
+    height: calc(var(--app-height) - 72px - 52px - 48px);
   }
 }

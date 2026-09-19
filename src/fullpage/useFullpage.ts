@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { Observer } from 'gsap/Observer';
 import { hashFor, resolveHash, screens } from '../data/content';
+import { getAppHeight, subscribeAppHeight } from './appHeight';
 
 gsap.registerPlugin(Observer);
 
@@ -31,6 +32,8 @@ export function useFullpage({ locked }: Options) {
     setStep(nextStep);
     applyHash(nextIndex, nextStep);
   }, [applyHash]);
+
+  const trackOffset = useCallback((screenIndex: number) => -screenIndex * getAppHeight(), []);
 
   const goTo = useCallback(
     (nextIndex: number, nextStep = 0, instant = false) => {
@@ -68,12 +71,14 @@ export function useFullpage({ locked }: Options) {
         });
       };
 
+      const y = trackOffset(clampedIndex);
+
       if (!screenChanged || moveDuration === 0) {
-        gsap.set(track, { y: `${-clampedIndex * 100}vh` });
+        gsap.set(track, { y });
         gsap.delayedCall(moveDuration, release);
       } else {
         gsap.to(track, {
-          y: `${-clampedIndex * 100}vh`,
+          y,
           duration: moveDuration,
           ease: 'power3.inOut',
           overwrite: 'auto',
@@ -81,7 +86,7 @@ export function useFullpage({ locked }: Options) {
         });
       }
     },
-    [commit],
+    [commit, trackOffset],
   );
 
   const move = useCallback(
@@ -112,27 +117,33 @@ export function useFullpage({ locked }: Options) {
       const next = resolveHash(window.location.hash);
       goTo(next.index, next.step, true);
     };
-    const onResize = () => {
+
+    window.addEventListener('hashchange', onHash);
+    const unsubscribeHeight = subscribeAppHeight(() => {
       const track = trackRef.current;
       if (!track) {
         return;
       }
-      gsap.set(track, { y: `${-indexRef.current * 100}vh` });
-    };
+      gsap.set(track, { y: trackOffset(indexRef.current) });
+    });
 
-    window.addEventListener('hashchange', onHash);
-    window.addEventListener('resize', onResize);
     return () => {
       window.removeEventListener('hashchange', onHash);
-      window.removeEventListener('resize', onResize);
+      unsubscribeHeight();
     };
-  }, [goTo]);
+  }, [goTo, trackOffset]);
 
   useEffect(() => {
+    // While the video modal is open, do not capture wheel/touch — otherwise
+    // Google Drive's iframe never receives play/scrub gestures on mobile.
+    if (locked) {
+      return;
+    }
+
     const acc = { value: 0, direction: 0 };
 
     const consume = (delta: number, wheel: boolean) => {
-      if (locked || busyRef.current) {
+      if (busyRef.current) {
         acc.value = 0;
         return;
       }
@@ -161,14 +172,14 @@ export function useFullpage({ locked }: Options) {
       wheelSpeed: -1,
       tolerance: 12,
       preventDefault: true,
-      ignore: 'a, input, textarea, video',
+      ignore: 'a, button, input, textarea, video, iframe, [role="dialog"]',
       onChangeY: (self) => {
         consume(self.deltaY, self.event?.type === 'wheel');
       },
     });
 
     const onKey = (event: KeyboardEvent) => {
-      if (locked || busyRef.current) {
+      if (busyRef.current) {
         return;
       }
       if (['ArrowDown', 'PageDown', ' '].includes(event.key)) {
