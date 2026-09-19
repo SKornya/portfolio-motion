@@ -144,13 +144,14 @@ export function useFullpage({ locked }: Options) {
         acc.direction = sign;
       }
       acc.value += delta;
+      // wheelSpeed: -1 flips wheel to match touch (swipe up / scroll down → next)
       const threshold = wheel ? 90 : 40;
       if (acc.value >= threshold) {
         acc.value = 0;
-        move(1);
+        move(-1);
       } else if (acc.value <= -threshold) {
         acc.value = 0;
-        move(-1);
+        move(1);
       }
     };
 
