@@ -78,7 +78,7 @@ export const projects: Project[] = [
     num: '01',
     title: 'ТЕЛЕВИЗОРЫ ТРИКОЛОР QLED — НАСТОЯЩИЙ ЦВЕТ',
     result: 'РК получила бронзу на фестивале Silver Mercury',
-    videoUrl: 'https://drive.google.com/file/d/1dmJ-9RPSvG3XGOMY3I8IiV4r5ytf6qgv/view?usp=drive_link',
+    videoUrl: 'https://storage.yandexcloud.net/portfolio-ruda/START_1%D1%80%D1%83%D0%B1%D0%BB%D1%8C.mp4',
     large: images.projects[0].large,
     small: images.projects[0].small,
   },
@@ -86,7 +86,7 @@ export const projects: Project[] = [
     num: '02',
     title: 'ИМИДЖ ДЛЯ ОНЛАЙН-КИНОТЕАТРА ТРИКОЛОР',
     result: 'Рост всех показателей на ~10% от обычных значений',
-    videoUrl: 'https://drive.google.com/file/d/1pyjMWL41bnPBQ5AqQmzLmpQX2tJwNDfC/view?usp=drive_link',
+    videoUrl: 'https://storage.yandexcloud.net/portfolio-ruda/START_1%D1%80%D1%83%D0%B1%D0%BB%D1%8C.mp4',
     large: images.projects[1].large,
     small: images.projects[1].small,
   },
@@ -94,7 +94,7 @@ export const projects: Project[] = [
     num: '03',
     title: 'ВИЗУАЛЬНОЕ ОФОРМЛЕНИЕ К 20-ЛЕТИЮ ТРИКОЛОРА',
     result: 'Создание 3D графики и анимации',
-    videoUrl: '',
+    videoUrl: 'https://storage.yandexcloud.net/portfolio-ruda/START_1%D1%80%D1%83%D0%B1%D0%BB%D1%8C.mp4',
     large: images.projects[2].large,
     small: images.projects[2].small,
   },
@@ -102,7 +102,7 @@ export const projects: Project[] = [
     num: '04',
     title: 'START ЗА 1 РУБЛЬ',
     result: 'Прирост аудитории после пробного периода',
-    videoUrl: 'https://drive.google.com/file/d/19-eyVM962i33ogwjXP1lk7xHeGtag3rK/view?usp=drive_link',
+    videoUrl: 'https://storage.yandexcloud.net/portfolio-ruda/START_1%D1%80%D1%83%D0%B1%D0%BB%D1%8C.mp4',
     large: images.projects[3].large,
     small: images.projects[3].small,
   },
@@ -110,7 +110,7 @@ export const projects: Project[] = [
 
 export const showreel = {
   title: 'ШОУРИЛ',
-  videoUrl: 'https://drive.google.com/file/d/1CQNquLgDXHUZP0kiMuXAQ-hHYRtkd2lp/view?usp=drive_link',
+  videoUrl: 'https://storage.yandexcloud.net/portfolio-ruda/START_1%D1%80%D1%83%D0%B1%D0%BB%D1%8C.mp4',
 };
 
 export const contacts = {

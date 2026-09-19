@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 import { resolveVideo } from '../data/videoSrc';
 import styles from './VideoModal.module.less';
 
@@ -11,9 +11,6 @@ type Props = {
   video: VideoPayload | null;
   onClose: () => void;
 };
-
-/** Drive's player chrome lays out for ~desktop widths; below this it breaks. */
-const DRIVE_LAYOUT_WIDTH = 720;
 
 export function VideoModal({ video, onClose }: Props) {
   useEffect(() => {
@@ -61,13 +58,22 @@ function renderPlayer(src: string, title: string) {
   const video = resolveVideo(src);
 
   if (video.kind === 'embed') {
-    return <DriveEmbed src={video.src} title={title} />;
+    return (
+      <iframe
+        className={styles.player}
+        src={video.src}
+        title={title}
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+        allowFullScreen
+        referrerPolicy="strict-origin-when-cross-origin"
+      />
+    );
   }
 
   if (video.kind === 'file') {
     return (
       <video
-        className={styles.filePlayer}
+        className={styles.player}
         src={video.src}
         controls
         playsInline
@@ -77,54 +83,4 @@ function renderPlayer(src: string, title: string) {
   }
 
   return <p className={styles.empty}>Видео ещё не загружено. Ссылку можно добавить в данные проекта.</p>;
-}
-
-type DriveEmbedProps = {
-  src: string;
-  title: string;
-};
-
-function DriveEmbed({ src, title }: DriveEmbedProps) {
-  const frameRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(1);
-
-  useEffect(() => {
-    const node = frameRef.current;
-    if (!node || typeof ResizeObserver === 'undefined') {
-      return;
-    }
-
-    const apply = () => {
-      const width = node.clientWidth;
-      if (width <= 0) {
-        return;
-      }
-      setScale(Math.min(1, width / DRIVE_LAYOUT_WIDTH));
-    };
-
-    apply();
-    const observer = new ResizeObserver(apply);
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
-
-  const layoutScale = scale > 0 ? scale : 1;
-
-  return (
-    <div ref={frameRef} className={styles.embed}>
-      <iframe
-        className={styles.player}
-        src={src}
-        title={title}
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
-        allowFullScreen
-        referrerPolicy="strict-origin-when-cross-origin"
-        style={{
-          width: `${100 / layoutScale}%`,
-          height: `${100 / layoutScale}%`,
-          transform: `scale(${layoutScale})`,
-        }}
-      />
-    </div>
-  );
 }
