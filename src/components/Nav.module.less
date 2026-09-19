@@ -9,7 +9,7 @@
   align-items: center;
   justify-content: space-between;
   width: min(1127px, calc(100% - 48px));
-  padding: 40px 0;
+  padding: calc(40px + env(safe-area-inset-top, 0px)) 0 40px;
   transform: translateX(-50%);
   pointer-events: none;
 }
@@ -39,12 +39,13 @@
 
 @media (max-width: 720px) {
   .nav {
-    width: calc(100% - 24px);
-    padding: 18px 0;
-    gap: 10px;
+    width: calc(100% - 20px);
+    padding: calc(14px + env(safe-area-inset-top, 0px)) 0 14px;
+    gap: 6px;
   }
 
   .link {
-    font-size: 12px;
+    font-size: 11px;
+    letter-spacing: 0;
   }
 }

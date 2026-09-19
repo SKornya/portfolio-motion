@@ -53,3 +53,27 @@
   font-size: 28px;
   line-height: 1;
 }
+
+@media (max-width: 720px) {
+  .backdrop {
+    padding: 12px;
+    padding-top: max(12px, env(safe-area-inset-top, 0px));
+  }
+
+  .dialog {
+    border-radius: 16px;
+  }
+
+  .empty {
+    min-height: 180px;
+    padding: 20px;
+    font-size: 16px;
+  }
+
+  .close {
+    top: 8px;
+    right: 8px;
+    width: 36px;
+    height: 36px;
+  }
+}

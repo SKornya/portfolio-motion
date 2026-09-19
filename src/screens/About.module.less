@@ -37,7 +37,7 @@
 
 .fig {
   position: absolute;
-  width: clamp(328px, 14vw, 220px);
+  width: clamp(140px, 18vw, 220px);
   pointer-events: none;
   user-select: none;
 }
@@ -92,12 +92,38 @@
 }
 
 @media (max-width: 720px) {
-  .title {
-    white-space: normal;
+  .body {
+    width: 100%;
+    max-width: calc(100vw - 32px);
+    padding-top: 88px;
+  }
+
+  .text {
+    width: 100%;
+    margin: 16px 0 28px;
+    font-size: 15px;
+    line-height: 1.4;
   }
 
   .fig {
-    width: 36vw;
-    opacity: 0.85;
+    width: 22vw;
+    opacity: 0.55;
+    z-index: 0;
+  }
+
+  .left {
+    top: 8%;
+    right: 88%;
+  }
+
+  .right {
+    left: 88%;
+    bottom: 18%;
+  }
+
+  .text,
+  .body > :not(img) {
+    position: relative;
+    z-index: 1;
   }
 }

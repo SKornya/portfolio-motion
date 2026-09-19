@@ -22,7 +22,7 @@ export function ProjectCard({ project, onWatch }: Props) {
       </div>
       <div className={styles.grid}>
         <div className={styles.large}>
-          <img src={project.large} alt={`Превью видео: ${project.title}`} />
+          <img src={project.large} alt="" />
         </div>
         <div className={styles.stack}>
           {project.small.map((src) => (

@@ -43,6 +43,13 @@
   line-height: 1;
   text-align: center;
   white-space: nowrap;
+
+  @media (max-width: 720px) {
+    .clamp-title(36px, 11vw, 52px);
+    max-width: calc(100vw - 32px);
+    white-space: normal;
+    letter-spacing: -0.02em;
+  }
 }
 
 .screen-title-slot(@top: 56px) {
@@ -53,6 +60,11 @@
   width: max-content;
   max-width: 92vw;
   transform: translateX(-50%);
+
+  @media (max-width: 720px) {
+    top: min(@top, 72px);
+    max-width: calc(100vw - 32px);
+  }
 }
 
 .screen-base() {

@@ -51,7 +51,7 @@
 }
 
 .visible {
-  max-height: 200px;
+  max-height: 220px;
   opacity: 1;
   transform: translateY(0);
 }
@@ -87,15 +87,28 @@
 
 @media (max-width: 720px) {
   .panel {
-    padding: 10vh 20px 24px;
-    border-radius: 36px 36px 0 0;
+    padding: calc(72px + 48px + 12px) 16px 20px;
+    border-radius: 28px 28px 0 0;
   }
 
   .list {
-    column-gap: 16px;
+    column-gap: 12px;
+    row-gap: calc(clamp(8px, 1.4vh, 14px) * var(--fit));
   }
 
   .num {
-    font-size: calc(clamp(48px, 16vw, 72px) * var(--fit));
+    font-size: calc(clamp(36px, 12vw, 52px) * var(--fit));
+  }
+
+  .heading {
+    font-size: calc(clamp(16px, 4.5vw, 22px) * var(--fit));
+  }
+
+  .text {
+    font-size: calc(clamp(12px, 3.4vw, 15px) * var(--fit));
+  }
+
+  .visible {
+    max-height: 180px;
   }
 }

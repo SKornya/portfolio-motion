@@ -10,6 +10,7 @@
   left: 50%;
   top: 50%;
   width: min(1400px, 100vw);
+  max-width: none;
   height: min(82vh, 860px);
   transform: translate(-50%, -50%);
   object-fit: contain;
@@ -42,6 +43,12 @@
 }
 
 @media (max-width: 900px) {
+  .face {
+    width: min(1200px, 140vw);
+    height: min(78vh, 720px);
+    top: 46%;
+  }
+
   .note {
     top: auto;
     bottom: 24px;
@@ -56,11 +63,32 @@
 }
 
 @media (max-width: 640px) {
-  .title {
-    white-space: normal;
+  .face {
+    width: 220vw;
+    height: 80vh;
+    top: 40%;
+  }
+
+  .frame {
+    height: calc(100% - 48px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .note {
-    display: none;
+    left: 50%;
+    right: auto;
+    bottom: 96px;
+    max-width: min(280px, 80vw);
+    text-align: center;
+    transform: translateX(-50%);
+  }
+
+  .cta {
+    left: 50%;
+    right: auto;
+    bottom: 28px;
+    transform: translateX(-50%);
   }
 }
