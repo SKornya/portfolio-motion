@@ -1,0 +1,51 @@
+.row {
+  container-type: inline-size;
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+  user-select: none;
+  pointer-events: none;
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: slide var(--duration, 40s) linear infinite;
+  animation-play-state: paused;
+}
+
+.ready .track {
+  animation-play-state: running;
+}
+
+.reverse .track {
+  animation-direction: reverse;
+}
+
+.set {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--gap, 35px);
+  padding-right: var(--gap, 35px);
+}
+
+.item {
+  flex-shrink: 0;
+}
+
+@keyframes slide {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(calc(var(--distance) * -1), 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none;
+  }
+}

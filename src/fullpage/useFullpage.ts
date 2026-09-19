@@ -1,0 +1,199 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { Observer } from 'gsap/Observer';
+import { hashFor, resolveHash, screens } from '../data/content';
+
+gsap.registerPlugin(Observer);
+
+type Options = {
+  locked: boolean;
+};
+
+export function useFullpage({ locked }: Options) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const indexRef = useRef(0);
+  const stepRef = useRef(0);
+  const busyRef = useRef(false);
+  const [index, setIndex] = useState(0);
+  const [step, setStep] = useState(0);
+
+  const applyHash = useCallback((nextIndex: number, nextStep: number) => {
+    const hash = hashFor(nextIndex, nextStep);
+    if (window.location.hash.replace(/^#/, '') !== hash) {
+      history.replaceState(null, '', `#${hash}`);
+    }
+  }, []);
+
+  const commit = useCallback((nextIndex: number, nextStep: number) => {
+    indexRef.current = nextIndex;
+    stepRef.current = nextStep;
+    setIndex(nextIndex);
+    setStep(nextStep);
+    applyHash(nextIndex, nextStep);
+  }, [applyHash]);
+
+  const goTo = useCallback(
+    (nextIndex: number, nextStep = 0, instant = false) => {
+      const clampedIndex = Math.max(0, Math.min(screens.length - 1, nextIndex));
+      const maxStep = (screens[clampedIndex]?.steps ?? 1) - 1;
+      const clampedStep = Math.max(0, Math.min(maxStep, nextStep));
+
+      if (clampedIndex === indexRef.current && clampedStep === stepRef.current && !instant) {
+        return;
+      }
+      if (busyRef.current && !instant) {
+        return;
+      }
+
+      const track = trackRef.current;
+      if (!track) {
+        return;
+      }
+
+      const screenChanged = clampedIndex !== indexRef.current;
+      commit(clampedIndex, clampedStep);
+
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const moveDuration = instant || prefersReduced ? 0 : screenChanged ? 1.05 : 0.6;
+      const cooldown = instant || prefersReduced ? 0 : 0.32;
+      busyRef.current = true;
+
+      const release = () => {
+        if (cooldown <= 0) {
+          busyRef.current = false;
+          return;
+        }
+        gsap.delayedCall(cooldown, () => {
+          busyRef.current = false;
+        });
+      };
+
+      if (!screenChanged || moveDuration === 0) {
+        gsap.set(track, { y: `${-clampedIndex * 100}vh` });
+        gsap.delayedCall(moveDuration, release);
+      } else {
+        gsap.to(track, {
+          y: `${-clampedIndex * 100}vh`,
+          duration: moveDuration,
+          ease: 'power3.inOut',
+          overwrite: 'auto',
+          onComplete: release,
+        });
+      }
+    },
+    [commit],
+  );
+
+  const move = useCallback(
+    (direction: 1 | -1) => {
+      if (busyRef.current) {
+        return;
+      }
+      const screen = screens[indexRef.current];
+      const nextStep = stepRef.current + direction;
+      if (nextStep >= 0 && nextStep < screen.steps) {
+        goTo(indexRef.current, nextStep);
+        return;
+      }
+      const nextIndex = indexRef.current + direction;
+      if (nextIndex < 0 || nextIndex >= screens.length) {
+        return;
+      }
+      goTo(nextIndex, direction === 1 ? 0 : 999);
+    },
+    [goTo],
+  );
+
+  useEffect(() => {
+    const initial = resolveHash(window.location.hash);
+    goTo(initial.index, initial.step, true);
+
+    const onHash = () => {
+      const next = resolveHash(window.location.hash);
+      goTo(next.index, next.step, true);
+    };
+    const onResize = () => {
+      const track = trackRef.current;
+      if (!track) {
+        return;
+      }
+      gsap.set(track, { y: `${-indexRef.current * 100}vh` });
+    };
+
+    window.addEventListener('hashchange', onHash);
+    window.addEventListener('resize', onResize);
+    return () => {
+      window.removeEventListener('hashchange', onHash);
+      window.removeEventListener('resize', onResize);
+    };
+  }, [goTo]);
+
+  useEffect(() => {
+    const acc = { value: 0, direction: 0 };
+
+    const consume = (delta: number, wheel: boolean) => {
+      if (locked || busyRef.current) {
+        acc.value = 0;
+        return;
+      }
+      const sign = Math.sign(delta);
+      if (sign !== 0 && acc.direction !== 0 && sign !== acc.direction) {
+        acc.value = 0;
+      }
+      if (sign !== 0) {
+        acc.direction = sign;
+      }
+      acc.value += delta;
+      const threshold = wheel ? 90 : 40;
+      if (acc.value >= threshold) {
+        acc.value = 0;
+        move(1);
+      } else if (acc.value <= -threshold) {
+        acc.value = 0;
+        move(-1);
+      }
+    };
+
+    const observer = Observer.create({
+      target: window,
+      type: 'wheel,touch',
+      wheelSpeed: -1,
+      tolerance: 12,
+      preventDefault: true,
+      ignore: 'a, input, textarea, video',
+      onChangeY: (self) => {
+        consume(self.deltaY, self.event?.type === 'wheel');
+      },
+    });
+
+    const onKey = (event: KeyboardEvent) => {
+      if (locked || busyRef.current) {
+        return;
+      }
+      if (['ArrowDown', 'PageDown', ' '].includes(event.key)) {
+        event.preventDefault();
+        move(1);
+      }
+      if (['ArrowUp', 'PageUp'].includes(event.key)) {
+        event.preventDefault();
+        move(-1);
+      }
+      if (event.key === 'Home') {
+        event.preventDefault();
+        goTo(0, 0);
+      }
+      if (event.key === 'End') {
+        event.preventDefault();
+        goTo(screens.length - 1, 1);
+      }
+    };
+
+    window.addEventListener('keydown', onKey);
+    return () => {
+      observer.kill();
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [goTo, locked, move]);
+
+  return { trackRef, index, step, goTo };
+}

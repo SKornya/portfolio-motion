@@ -1,0 +1,50 @@
+@import '../styles/tokens.less';
+
+.nav {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: min(1127px, calc(100% - 48px));
+  padding: 40px 0;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.link {
+  pointer-events: auto;
+  font-size: 16px;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+  background: none;
+  border: none;
+  transition: opacity 0.2s ease, color 0.3s ease;
+}
+
+.dark .link {
+  color: @color-text;
+}
+
+.light .link {
+  color: @color-text-dark;
+}
+
+.link:hover,
+.linkActive {
+  opacity: 0.7;
+}
+
+@media (max-width: 720px) {
+  .nav {
+    width: calc(100% - 24px);
+    padding: 18px 0;
+    gap: 10px;
+  }
+
+  .link {
+    font-size: 12px;
+  }
+}

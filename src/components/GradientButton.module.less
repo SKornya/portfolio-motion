@@ -1,0 +1,103 @@
+@import '../styles/tokens.less';
+
+.button {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid @color-border;
+  border-radius: @radius-button;
+  background: transparent;
+  color: @color-text;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  padding: 11px 35px;
+  transition: transform 0.28s ease, filter 0.28s ease;
+  white-space: nowrap;
+}
+
+.button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #3d30ff 0%, #893dff 42%, #f42dff 100%);
+  background-size: 200% 100%;
+  background-position: 0% 50%;
+  opacity: 0;
+  transform: scale(1.16);
+  transition:
+    opacity 0.4s ease,
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.lg {
+  font-size: 32px;
+  min-width: 240px;
+  min-height: 63px;
+}
+
+.sm {
+  border-radius: @radius-button-sm;
+  font-size: 20px;
+  min-width: 172px;
+  min-height: 48px;
+}
+
+.button:hover,
+.button:focus-visible {
+  transform: translateY(-1px);
+}
+
+.button:hover::before,
+.button:focus-visible::before {
+  opacity: 1;
+  transform: scale(1);
+  animation: gradient-shift 5s ease-in-out infinite;
+}
+
+@keyframes gradient-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button:hover::before,
+  .button:focus-visible::before {
+    animation: none;
+    background-position: 50% 50%;
+  }
+}
+
+.button:disabled {
+  cursor: default;
+  filter: grayscale(0.15);
+  opacity: 0.72;
+  transform: none;
+}
+
+.button:disabled::before {
+  opacity: 0;
+  transform: scale(1.16);
+}
+
+@media (max-width: 720px) {
+  .lg {
+    font-size: 20px;
+    min-width: 180px;
+    min-height: 50px;
+  }
+
+  .sm {
+    font-size: 16px;
+    min-width: 140px;
+  }
+}

@@ -1,0 +1,77 @@
+@import '../styles/tokens.less';
+
+.screen {
+  .screen-base();
+  background: #000;
+}
+
+.tv {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.title {
+  .screen-title-slot(100px);
+  .screen-title();
+  z-index: 3;
+  color: @color-text;
+  text-shadow: 0 8px 40px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+}
+
+.play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  width: clamp(64px, 7vw, 96px);
+  height: clamp(64px, 7vw, 96px);
+  padding: 0;
+  border: none;
+  background: transparent;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  transition: transform 0.25s ease;
+}
+
+.play svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.play circle {
+  fill: transparent;
+  stroke: #fff;
+  stroke-width: 3;
+  transition: fill 0.25s ease, stroke 0.25s ease;
+}
+
+.play path {
+  fill: #fff;
+  transition: fill 0.25s ease;
+}
+
+.play:hover,
+.play:focus-visible {
+  transform: translate(-50%, -50%) scale(1.06);
+}
+
+.play:hover circle,
+.play:focus-visible circle {
+  fill: rgba(255, 255, 255, 0.92);
+  stroke: transparent;
+}
+
+.play:hover path,
+.play:focus-visible path {
+  fill: #1c1c1c;
+}
+
+@media (max-width: 720px) {
+  .play {
+    top: 36%;
+  }
+}

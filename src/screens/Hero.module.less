@@ -1,0 +1,66 @@
+@import '../styles/tokens.less';
+
+.screen {
+  .screen-base();
+  background: @color-bg-dark;
+}
+
+.face {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(1400px, 100vw);
+  height: min(82vh, 860px);
+  transform: translate(-50%, -50%);
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.frame {
+  .screen-title-slot();
+  height: calc(100% - 56px);
+}
+
+.title {
+  .screen-title();
+}
+
+.note {
+  position: absolute;
+  left: 0;
+  top: 42%;
+  max-width: 280px;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.35;
+}
+
+.cta {
+  position: absolute;
+  top: 42%;
+  right: 0;
+}
+
+@media (max-width: 900px) {
+  .note {
+    top: auto;
+    bottom: 24px;
+    max-width: 180px;
+    font-size: 13px;
+  }
+
+  .cta {
+    top: auto;
+    bottom: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .title {
+    white-space: normal;
+  }
+
+  .note {
+    display: none;
+  }
+}
