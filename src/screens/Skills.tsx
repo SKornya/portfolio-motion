@@ -2,27 +2,38 @@ import { useLayoutEffect, useRef } from 'react';
 import { skills } from '../data/content';
 import styles from './Skills.module.less';
 
-function fitSkillsList(list: HTMLElement) {
-  const items = Array.from(list.children) as HTMLElement[];
-  list.style.setProperty('--fit', '1');
+const STAGGER_MS = 90;
 
-  const restore = items.map((item) => {
-    const { maxHeight, overflow, opacity, transform } = item.style;
+function fitSkillsList(list: HTMLElement) {
+  const parent = list.parentElement;
+  if (!parent) {
+    return;
+  }
+
+  const probe = list.cloneNode(true) as HTMLElement;
+  probe.setAttribute('aria-hidden', 'true');
+  probe.style.position = 'absolute';
+  probe.style.left = '0';
+  probe.style.top = '0';
+  probe.style.width = `${list.clientWidth}px`;
+  probe.style.height = `${list.clientHeight}px`;
+  probe.style.visibility = 'hidden';
+  probe.style.pointerEvents = 'none';
+  probe.style.zIndex = '-1';
+  probe.style.setProperty('--fit', '1');
+
+  Array.from(probe.children).forEach((child) => {
+    const item = child as HTMLElement;
     item.style.maxHeight = 'none';
     item.style.overflow = 'visible';
     item.style.opacity = '1';
     item.style.transform = 'none';
-    return () => {
-      item.style.maxHeight = maxHeight;
-      item.style.overflow = overflow;
-      item.style.opacity = opacity;
-      item.style.transform = transform;
-    };
   });
 
+  parent.appendChild(probe);
   const available = list.clientHeight;
-  const needed = list.scrollHeight;
-  restore.forEach((reset) => reset());
+  const needed = probe.scrollHeight;
+  parent.removeChild(probe);
 
   const next = available > 0 && needed > available ? Math.max(0.52, (available / needed) * 0.98) : 1;
   list.style.setProperty('--fit', next.toFixed(3));
@@ -39,7 +50,8 @@ export function Skills({ step, active }: Props) {
   if (active) {
     storedStep.current = step;
   }
-  const visibleCount = storedStep.current + 1;
+
+  const listRevealed = storedStep.current >= 1;
 
   useLayoutEffect(() => {
     const list = listRef.current;
@@ -63,18 +75,23 @@ export function Skills({ step, active }: Props) {
           НАВЫКИ
         </h2>
         <div ref={listRef} className={styles.list}>
-          {skills.map((skill, index) => (
-            <article
-              key={skill.num}
-              className={`${styles.item} ${index < visibleCount ? styles.visible : ''}`}
-            >
-              <p className={styles.num}>{skill.num}</p>
-              <div className={styles.copy}>
-                <h3 className={styles.heading}>{skill.title}</h3>
-                <p className={styles.text}>{skill.text}</p>
-              </div>
-            </article>
-          ))}
+          {skills.map((skill, index) => {
+            const enterDelay = index * STAGGER_MS;
+            const exitDelay = (skills.length - 1 - index) * STAGGER_MS;
+            return (
+              <article
+                key={skill.num}
+                className={`${styles.item} ${listRevealed ? styles.visible : ''}`}
+                style={{ transitionDelay: `${listRevealed ? enterDelay : exitDelay}ms` }}
+              >
+                <p className={styles.num}>{skill.num}</p>
+                <div className={styles.copy}>
+                  <h3 className={styles.heading}>{skill.title}</h3>
+                  <p className={styles.text}>{skill.text}</p>
+                </div>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>

@@ -22,12 +22,20 @@ export function ProjectCard({ project, onWatch }: Props) {
       </div>
       <div className={styles.grid}>
         <div className={styles.large}>
-          <img src={project.large} alt="" />
+          <picture>
+            <source media="(max-width: 860px)" srcSet={project.mobileLarge} />
+            <img src={project.large} alt="" />
+          </picture>
         </div>
         <div className={styles.stack}>
-          {project.small.map((src) => (
+          {project.small.map((src, index) => (
             <div key={src} className={styles.small}>
-              <img src={src} alt="" />
+              <picture>
+                {index === 0 ? (
+                  <source media="(max-width: 860px)" srcSet={project.mobileSmall} />
+                ) : null}
+                <img src={src} alt="" />
+              </picture>
             </div>
           ))}
         </div>

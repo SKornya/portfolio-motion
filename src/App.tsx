@@ -1,7 +1,8 @@
 import { useCallback, useState } from 'react';
+import { GalleryLightbox, type GalleryPayload } from './components/GalleryLightbox';
 import { Nav } from './components/Nav';
 import { VideoModal, type VideoPayload } from './components/VideoModal';
-import { resolveHash, screens, showreel } from './data/content';
+import { resolveHash, screens, showreel, type Project } from './data/content';
 import { useFullpage } from './fullpage/useFullpage';
 import { About } from './screens/About';
 import { Contacts } from './screens/Contacts';
@@ -18,7 +19,9 @@ const showreelIndex = screens.findIndex((screen) => screen.id === 'showreel');
 
 export function App() {
   const [video, setVideo] = useState<VideoPayload | null>(null);
-  const { trackRef, index, step, goTo } = useFullpage({ locked: Boolean(video) });
+  const [gallery, setGallery] = useState<GalleryPayload | null>(null);
+  const mediaOpen = Boolean(video || gallery);
+  const { trackRef, index, step, goTo } = useFullpage({ locked: mediaOpen });
 
   const goHash = useCallback(
     (hash: string) => {
@@ -32,6 +35,16 @@ export function App() {
     setVideo({ src, title });
   }, []);
 
+  const onWatchProject = useCallback((project: Project) => {
+    if (project.gallery?.length) {
+      setGallery({ images: project.gallery, title: project.title });
+      return;
+    }
+    if (project.videoUrl) {
+      setVideo({ src: project.videoUrl, title: project.title });
+    }
+  }, []);
+
   return (
     <div className={styles.viewport}>
       <Nav index={index} step={step} onNavigate={goHash} />
@@ -40,15 +53,12 @@ export function App() {
         <Works />
         <About onContact={() => goHash('contacts')} />
         <Skills step={step} active={index === skillsIndex} />
-        <Projects
-          cardIndex={step}
-          active={index === projectsIndex}
-          onWatch={(item) => openVideo(item.videoUrl, item.title)}
-        />
+        <Projects cardIndex={step} active={index === projectsIndex} onWatch={onWatchProject} />
         <Showreel onPlay={() => openVideo(showreel.videoUrl, showreel.title)} />
       </div>
       <Contacts open={index === showreelIndex && step === 1} />
       <VideoModal video={video} onClose={() => setVideo(null)} />
+      <GalleryLightbox gallery={gallery} onClose={() => setGallery(null)} />
     </div>
   );
 }

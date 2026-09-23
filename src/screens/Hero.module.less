@@ -9,6 +9,7 @@
   position: absolute;
   left: 50%;
   top: 50%;
+  z-index: 3;
   width: min(1400px, 100vw);
   max-width: none;
   height: min(82vh, 860px);
@@ -24,21 +25,13 @@
 
 .title {
   .screen-title();
-}
-
-.note {
-  position: absolute;
-  left: 0;
-  top: 42%;
-  max-width: 280px;
-  font-size: 16px;
-  font-weight: 300;
-  line-height: 1.35;
+  position: relative;
+  z-index: 0;
 }
 
 .cta {
   position: absolute;
-  top: 42%;
+  top: 45%;
   right: 0;
 }
 
@@ -49,26 +42,21 @@
     top: 46%;
   }
 
-  .note {
-    top: auto;
-    bottom: 24px;
-    max-width: 180px;
-    font-size: 13px;
-  }
-
   .cta {
     top: auto;
-    bottom: 20px;
+    bottom: 13%;
+    z-index: 3;
   }
 }
 
 @media (max-width: 640px) {
   .face {
-    top: 50%;
+    top: 45%;
     left: 50%;
-    width: 220vw;
-    height: 80vh;
-    transform: translate(-50%, -50%);
+    z-index: 2;
+    width: 280vw;
+    height: 95vh;
+    transform: translate(-50%, -48%);
   }
 
   .frame {
@@ -76,21 +64,19 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    z-index: 1;
   }
 
-  .note {
-    left: 50%;
-    right: auto;
-    bottom: 96px;
-    max-width: min(280px, 80vw);
-    text-align: center;
-    transform: translateX(-50%);
+  .title {
+    position: relative;
+    z-index: 0;
   }
 
   .cta {
     left: 50%;
     right: auto;
-    bottom: 28px;
+    bottom: 13%;
     transform: translateX(-50%);
+    z-index: 3;
   }
 }

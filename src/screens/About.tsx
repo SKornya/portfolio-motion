@@ -10,12 +10,12 @@ type Props = {
 export function About({ onContact }: Props) {
   return (
     <section className={styles.screen} aria-labelledby="about-title">
-      <h2 id="about-title" className={styles.title}>
-        {about.title}
-      </h2>
-      <div className={styles.body}>
+      <div className={styles.cluster}>
         <img className={`${styles.fig} ${styles.left}`} src={images.fig03} alt="" />
         <img className={`${styles.fig} ${styles.right}`} src={images.fig04} alt="" />
+        <h2 id="about-title" className={styles.title}>
+          {about.title}
+        </h2>
         <p className={styles.text}>
           {about.lead}
           <br />

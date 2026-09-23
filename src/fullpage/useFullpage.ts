@@ -94,9 +94,8 @@ export function useFullpage({ locked }: Options) {
       if (busyRef.current) {
         return;
       }
-      const screen = screens[indexRef.current];
       const nextStep = stepRef.current + direction;
-      if (nextStep >= 0 && nextStep < screen.steps) {
+      if (nextStep >= 0 && nextStep < (screens[indexRef.current]?.steps ?? 1)) {
         goTo(indexRef.current, nextStep);
         return;
       }
