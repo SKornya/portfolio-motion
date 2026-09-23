@@ -35,7 +35,9 @@ function fitSkillsList(list: HTMLElement) {
   const needed = probe.scrollHeight;
   parent.removeChild(probe);
 
-  const next = available > 0 && needed > available ? Math.max(0.52, (available / needed) * 0.98) : 1;
+  const compact = window.matchMedia('(max-width: 430px)').matches;
+  const minFit = compact ? 0.36 : 0.52;
+  const next = available > 0 && needed > available ? Math.max(minFit, (available / needed) * 0.96) : 1;
   list.style.setProperty('--fit', next.toFixed(3));
 }
 

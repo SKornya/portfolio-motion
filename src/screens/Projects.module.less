@@ -91,3 +91,18 @@
     inset: 0 0 auto;
   }
 }
+
+@media (max-width: @bp-compact) {
+  .screen {
+    justify-content: flex-start;
+    padding-top: calc(72px + env(safe-area-inset-top, 0px) + 52px + 20px);
+  }
+
+  .title {
+    top: calc(56px + env(safe-area-inset-top, 0px));
+  }
+
+  .stage {
+    width: calc(100% - 20px);
+  }
+}

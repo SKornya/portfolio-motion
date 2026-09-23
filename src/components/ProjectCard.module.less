@@ -159,3 +159,36 @@
     gap: 8px;
   }
 }
+
+@media (max-width: @bp-compact) {
+  .card {
+    padding: 10px;
+    border-radius: 16px;
+  }
+
+  .head {
+    gap: 8px 10px;
+    margin-bottom: 8px;
+  }
+
+  .num {
+    font-size: clamp(28px, 9vw, 40px);
+  }
+
+  .title {
+    font-size: 13px;
+  }
+
+  .result {
+    font-size: 12px;
+  }
+
+  .grid {
+    gap: 6px;
+  }
+
+  .large,
+  .small {
+    border-radius: 10px;
+  }
+}

@@ -80,3 +80,22 @@
     z-index: 3;
   }
 }
+
+/* iPhone 13 / SE и другие узкие экраны */
+@media (max-width: @bp-compact) {
+  .face {
+    top: 58%;
+    width: 190vw;
+    height: 72vh;
+    transform: translate(-50%, -42%);
+  }
+
+  .title {
+    z-index: 3;
+  }
+
+  .cta {
+    bottom: max(28px, calc(10% + env(safe-area-inset-bottom, 0px)));
+    z-index: 4;
+  }
+}

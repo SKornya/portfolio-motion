@@ -17,6 +17,8 @@
 @radius-button-sm: 24px;
 
 @nav-height: 88px;
+@bp-mobile: 720px;
+@bp-compact: 430px;
 
 .gradient-cta() {
   background: radial-gradient(
@@ -49,6 +51,10 @@
     max-width: calc(100vw - 32px);
     white-space: normal;
     letter-spacing: -0.02em;
+  }
+
+  @media (max-width: @bp-compact) {
+    .clamp-title(30px, 9.5vw, 40px);
   }
 }
 

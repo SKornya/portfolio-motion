@@ -51,7 +51,7 @@
 }
 
 .visible {
-  max-height: 220px;
+  max-height: calc(220px * var(--fit));
   opacity: 1;
   transform: translateY(0);
 }
@@ -109,6 +109,36 @@
   }
 
   .visible {
-    max-height: 180px;
+    max-height: calc(160px * var(--fit));
+  }
+}
+
+@media (max-width: @bp-compact) {
+  .panel {
+    padding: calc(64px + 40px + 8px) 12px 12px;
+    border-radius: 22px 22px 0 0;
+  }
+
+  .list {
+    column-gap: 8px;
+    row-gap: calc(6px * var(--fit));
+  }
+
+  .num {
+    font-size: calc(clamp(28px, 9vw, 40px) * var(--fit));
+  }
+
+  .heading {
+    font-size: calc(clamp(13px, 3.8vw, 17px) * var(--fit));
+  }
+
+  .text {
+    margin-top: calc(3px * var(--fit));
+    font-size: calc(clamp(11px, 3vw, 13px) * var(--fit));
+    line-height: 1.25;
+  }
+
+  .visible {
+    max-height: calc(120px * var(--fit));
   }
 }
