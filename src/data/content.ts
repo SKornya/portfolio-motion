@@ -13,7 +13,7 @@ export const screens: ScreenDef[] = [
   { id: 'hero', hash: 'hero', theme: 'dark', steps: 1 },
   { id: 'works', hash: 'works', theme: 'dark', steps: 1 },
   { id: 'about', hash: 'about', theme: 'dark', steps: 1 },
-  { id: 'skills', hash: 'skills', theme: 'light', steps: 2 },
+  { id: 'skills', hash: 'skills', theme: 'light', steps: 1 },
   { id: 'projects', hash: 'projects', theme: 'dark', steps: 4 },
   { id: 'showreel', hash: 'showreel', theme: 'dark', steps: 2 },
 ];

@@ -17,7 +17,8 @@
 
 .stage {
   position: relative;
-  width: min(1120px, calc(100% - 80px), calc((var(--app-height) - 210px) * 1120 / 472));
+  /* 1120 × 1.5 — крупнее на 2K/4K, соотношение сторон прежнее */
+  width: min(1680px, calc(100% - 80px), calc((var(--app-height) - 210px) * 1680 / 472));
   aspect-ratio: 1120 / 472;
   perspective: 1600px;
 }

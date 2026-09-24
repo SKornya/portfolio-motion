@@ -1,8 +1,10 @@
-import { useLayoutEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { skills } from '../data/content';
 import styles from './Skills.module.less';
 
 const STAGGER_MS = 90;
+/** Пауза после входа на экран, затем каскад списка */
+const REVEAL_DELAY_MS = 650;
 
 function fitSkillsList(list: HTMLElement) {
   const parent = list.parentElement;
@@ -42,18 +44,28 @@ function fitSkillsList(list: HTMLElement) {
 }
 
 type Props = {
-  step: number;
   active: boolean;
 };
 
-export function Skills({ step, active }: Props) {
+export function Skills({ active }: Props) {
   const listRef = useRef<HTMLDivElement>(null);
-  const storedStep = useRef(0);
-  if (active) {
-    storedStep.current = step;
-  }
+  const [listRevealed, setListRevealed] = useState(false);
 
-  const listRevealed = storedStep.current >= 1;
+  useEffect(() => {
+    if (!active) {
+      setListRevealed(false);
+      return;
+    }
+
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) {
+      setListRevealed(true);
+      return;
+    }
+
+    const id = window.setTimeout(() => setListRevealed(true), REVEAL_DELAY_MS);
+    return () => window.clearTimeout(id);
+  }, [active]);
 
   useLayoutEffect(() => {
     const list = listRef.current;

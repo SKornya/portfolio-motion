@@ -52,7 +52,7 @@ export function App() {
         <Hero onContact={() => goHash('contacts')} />
         <Works />
         <About onContact={() => goHash('contacts')} />
-        <Skills step={step} active={index === skillsIndex} />
+        <Skills active={index === skillsIndex} />
         <Projects cardIndex={step} active={index === projectsIndex} onWatch={onWatchProject} />
         <Showreel onPlay={() => openVideo(showreel.videoUrl, showreel.title)} />
       </div>
