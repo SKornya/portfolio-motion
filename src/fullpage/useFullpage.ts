@@ -7,6 +7,8 @@ import { getAppHeight, subscribeAppHeight } from './appHeight';
 gsap.registerPlugin(Observer);
 
 const INTERACTIVE = 'a, button, input, textarea, select, [contenteditable]';
+const TOUCH_IGNORE = 'a, button, input, textarea, video, iframe, [role="dialog"]';
+const WHEEL_IGNORE = '[role="dialog"]';
 
 type Options = {
   locked: boolean;
@@ -185,7 +187,12 @@ export function useFullpage({ locked }: Options) {
       wheelSpeed: -1,
       tolerance: 12,
       preventDefault: true,
-      ignore: 'a, button, input, textarea, video, iframe, [role="dialog"]',
+      // Touches on controls are left alone so taps stay reliable; the wheel
+      // pages from anywhere, including over buttons.
+      ignoreCheck: (event, isTouch) => {
+        const target = event.target as Element | null;
+        return Boolean(target?.closest?.(isTouch ? TOUCH_IGNORE : WHEEL_IGNORE));
+      },
       onChangeY: (self) => {
         consume(self.deltaY, self.event?.type === 'wheel');
       },
