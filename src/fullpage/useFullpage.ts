@@ -6,6 +6,8 @@ import { getAppHeight, subscribeAppHeight } from './appHeight';
 
 gsap.registerPlugin(Observer);
 
+const INTERACTIVE = 'a, button, input, textarea, select, [contenteditable]';
+
 type Options = {
   locked: boolean;
 };
@@ -191,6 +193,10 @@ export function useFullpage({ locked }: Options) {
 
     const onKey = (event: KeyboardEvent) => {
       if (busyRef.current) {
+        return;
+      }
+      // Space must still activate the focused button or link
+      if (event.key === ' ' && (event.target as Element | null)?.closest?.(INTERACTIVE)) {
         return;
       }
       if (['ArrowDown', 'PageDown', ' '].includes(event.key)) {
