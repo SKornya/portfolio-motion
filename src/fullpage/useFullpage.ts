@@ -133,6 +133,18 @@ export function useFullpage({ locked }: Options) {
   }, [goTo, trackOffset]);
 
   useEffect(() => {
+    // Off-screen sections must not take focus: focusing them scrolls the
+    // overflow-hidden viewport and desyncs it from the track transform.
+    const track = trackRef.current;
+    if (!track) {
+      return;
+    }
+    Array.from(track.children).forEach((screen, screenIndex) => {
+      screen.toggleAttribute('inert', screenIndex !== index);
+    });
+  }, [index]);
+
+  useEffect(() => {
     // While the video modal is open, do not capture wheel/touch — otherwise
     // Google Drive's iframe never receives play/scrub gestures on mobile.
     if (locked) {

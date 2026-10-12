@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { images } from '../assets/media';
 import { QrCode } from '../components/QrCode';
 import { contacts } from '../data/content';
@@ -8,11 +9,17 @@ type Props = {
 };
 
 export function Contacts({ open }: Props) {
+  const drawerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    drawerRef.current?.toggleAttribute('inert', !open);
+  }, [open]);
+
   return (
     <aside
+      ref={drawerRef}
       className={`${styles.drawer} ${open ? styles.open : ''}`}
       aria-labelledby="contacts-title"
-      aria-hidden={!open}
     >
       <div className={styles.panel}>
         <div className={styles.grid}>
