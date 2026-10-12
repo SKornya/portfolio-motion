@@ -7,7 +7,7 @@ import { getAppHeight, subscribeAppHeight } from './appHeight';
 gsap.registerPlugin(Observer);
 
 const INTERACTIVE = 'a, button, input, textarea, select, [contenteditable]';
-const TOUCH_IGNORE = 'a, button, input, textarea, video, iframe, [role="dialog"]';
+const TOUCH_IGNORE = 'a, button, input, textarea, video, [role="dialog"]';
 const WHEEL_IGNORE = '[role="dialog"]';
 
 /** Overflowing `[data-scrollable]` areas scroll themselves; the wheel chains to paging at their edges. */
@@ -163,8 +163,8 @@ export function useFullpage({ locked }: Options) {
   }, [index]);
 
   useEffect(() => {
-    // While the video modal is open, do not capture wheel/touch — otherwise
-    // Google Drive's iframe never receives play/scrub gestures on mobile.
+    // While a media overlay is open, do not capture wheel/touch — its own
+    // controls (scrubbing, swiping, zoom) need the gestures.
     if (locked) {
       return;
     }

@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import { resolveVideo } from '../data/videoSrc';
 import styles from './VideoModal.module.less';
 
 export type VideoPayload = {
@@ -64,40 +63,15 @@ export function VideoModal({ video, onClose }: Props) {
         <button ref={closeRef} type="button" className={styles.close} onClick={onClose} aria-label="Закрыть">
           ×
         </button>
-        {renderPlayer(video.src, video.title)}
+        {renderPlayer(video.src)}
       </div>
     </div>
   );
 }
 
-function renderPlayer(src: string, title: string) {
-  const video = resolveVideo(src);
-
-  if (video.kind === 'embed') {
-    return (
-      <iframe
-        className={styles.player}
-        src={video.src}
-        title={title}
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
-        allowFullScreen
-        referrerPolicy="strict-origin-when-cross-origin"
-      />
-    );
+function renderPlayer(src: string) {
+  if (!src.trim()) {
+    return <p className={styles.empty}>Видео временно недоступно.</p>;
   }
-
-  if (video.kind === 'file') {
-    return (
-      <video
-        className={styles.player}
-        src={video.src}
-        controls
-        autoPlay
-        playsInline
-        preload="metadata"
-      />
-    );
-  }
-
-  return <p className={styles.empty}>Видео временно недоступно.</p>;
+  return <video className={styles.player} src={src} controls autoPlay playsInline preload="metadata" />;
 }
