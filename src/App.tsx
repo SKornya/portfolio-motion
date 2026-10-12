@@ -35,6 +35,9 @@ export function App() {
     setVideo({ src, title });
   }, []);
 
+  const closeVideo = useCallback(() => setVideo(null), []);
+  const closeGallery = useCallback(() => setGallery(null), []);
+
   const onWatchProject = useCallback((project: Project) => {
     if (project.gallery?.length) {
       setGallery({ images: project.gallery, title: project.title });
@@ -57,8 +60,8 @@ export function App() {
         <Showreel onPlay={() => openVideo(showreel.videoUrl, showreel.title)} />
       </div>
       <Contacts open={index === showreelIndex && step === 1} />
-      <VideoModal video={video} onClose={() => setVideo(null)} />
-      <GalleryLightbox gallery={gallery} onClose={() => setGallery(null)} />
+      <VideoModal video={video} onClose={closeVideo} />
+      <GalleryLightbox gallery={gallery} onClose={closeGallery} />
     </div>
   );
 }
