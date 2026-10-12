@@ -99,5 +99,5 @@ function renderPlayer(src: string, title: string) {
     );
   }
 
-  return <p className={styles.empty}>Видео ещё не загружено. Ссылку можно добавить в данные проекта.</p>;
+  return <p className={styles.empty}>Видео временно недоступно.</p>;
 }
