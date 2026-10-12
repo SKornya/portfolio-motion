@@ -1,5 +1,5 @@
-import { useCallback, useState } from 'react';
-import { GalleryLightbox, type GalleryPayload } from './components/GalleryLightbox';
+import { lazy, Suspense, useCallback, useState } from 'react';
+import type { GalleryPayload } from './components/GalleryLightbox';
 import { Nav } from './components/Nav';
 import { VideoModal, type VideoPayload } from './components/VideoModal';
 import { resolveHash, screens, showreel, type Project } from './data/content';
@@ -13,6 +13,10 @@ import { Skills } from './screens/Skills';
 import { Works } from './screens/Works';
 import styles from './App.module.less';
 
+const GalleryLightbox = lazy(() =>
+  import('./components/GalleryLightbox').then((module) => ({ default: module.GalleryLightbox })),
+);
+
 const skillsIndex = screens.findIndex((screen) => screen.id === 'skills');
 const projectsIndex = screens.findIndex((screen) => screen.id === 'projects');
 const showreelIndex = screens.findIndex((screen) => screen.id === 'showreel');
@@ -20,6 +24,8 @@ const showreelIndex = screens.findIndex((screen) => screen.id === 'showreel');
 export function App() {
   const [video, setVideo] = useState<VideoPayload | null>(null);
   const [gallery, setGallery] = useState<GalleryPayload | null>(null);
+  // The lightbox chunk loads on first use and stays mounted for its close animation
+  const [galleryMounted, setGalleryMounted] = useState(false);
   const mediaOpen = Boolean(video || gallery);
   const { trackRef, index, step, goTo } = useFullpage({ locked: mediaOpen });
 
@@ -41,6 +47,7 @@ export function App() {
   const onWatchProject = useCallback((project: Project) => {
     if (project.gallery?.length) {
       setGallery({ images: project.gallery, title: project.title });
+      setGalleryMounted(true);
       return;
     }
     if (project.videoUrl) {
@@ -61,7 +68,11 @@ export function App() {
       </div>
       <Contacts open={index === showreelIndex && step === 1} />
       <VideoModal video={video} onClose={closeVideo} />
-      <GalleryLightbox gallery={gallery} onClose={closeGallery} />
+      {galleryMounted ? (
+        <Suspense fallback={null}>
+          <GalleryLightbox gallery={gallery} onClose={closeGallery} />
+        </Suspense>
+      ) : null}
     </div>
   );
 }

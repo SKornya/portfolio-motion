@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import QRCodeStyling from 'qr-code-styling';
 import styles from './QrCode.module.less';
 
 type Props = {
@@ -42,44 +41,51 @@ export function QrCode({ href, label }: Props) {
       return;
     }
 
-    const qr = new QRCodeStyling({
-      width: SIZE,
-      height: SIZE,
-      type: 'svg',
-      data: href,
-      image: serviceImage(href, label),
-      margin: 6,
-      qrOptions: {
-        errorCorrectionLevel: 'H',
-      },
-      dotsOptions: {
-        type: 'rounded',
-        color: '#292929',
-        roundSize: false,
-      },
-      cornersSquareOptions: {
-        type: 'extra-rounded',
-        color: '#292929',
-      },
-      cornersDotOptions: {
-        type: 'dot',
-        color: '#292929',
-      },
-      backgroundOptions: {
-        color: '#ffffff',
-        round: 12,
-      },
-      imageOptions: {
-        hideBackgroundDots: true,
-        imageSize: 0.32,
-        margin: 4,
-      },
+    let cancelled = false;
+    void import('qr-code-styling').then(({ default: QRCodeStyling }) => {
+      if (cancelled) {
+        return;
+      }
+      const qr = new QRCodeStyling({
+        width: SIZE,
+        height: SIZE,
+        type: 'svg',
+        data: href,
+        image: serviceImage(href, label),
+        margin: 6,
+        qrOptions: {
+          errorCorrectionLevel: 'H',
+        },
+        dotsOptions: {
+          type: 'rounded',
+          color: '#292929',
+          roundSize: false,
+        },
+        cornersSquareOptions: {
+          type: 'extra-rounded',
+          color: '#292929',
+        },
+        cornersDotOptions: {
+          type: 'dot',
+          color: '#292929',
+        },
+        backgroundOptions: {
+          color: '#ffffff',
+          round: 12,
+        },
+        imageOptions: {
+          hideBackgroundDots: true,
+          imageSize: 0.32,
+          margin: 4,
+        },
+      });
+
+      host.replaceChildren();
+      qr.append(host);
     });
 
-    host.replaceChildren();
-    qr.append(host);
-
     return () => {
+      cancelled = true;
       host.replaceChildren();
     };
   }, [href, label]);
