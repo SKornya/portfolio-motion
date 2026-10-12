@@ -37,6 +37,7 @@ function fitSkillsList(list: HTMLElement) {
   const needed = probe.scrollHeight;
   parent.removeChild(probe);
 
+  // keep in sync with @bp-compact in tokens.less
   const compact = window.matchMedia('(max-width: 430px)').matches;
   const minFit = compact ? 0.36 : 0.52;
   const next = available > 0 && needed > available ? Math.max(minFit, (available / needed) * 0.96) : 1;
