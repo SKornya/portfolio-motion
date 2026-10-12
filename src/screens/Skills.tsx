@@ -51,20 +51,17 @@ type Props = {
 export function Skills({ active }: Props) {
   const listRef = useRef<HTMLDivElement>(null);
   const [listRevealed, setListRevealed] = useState(false);
+  if (!active && listRevealed) {
+    setListRevealed(false);
+  }
 
   useEffect(() => {
     if (!active) {
-      setListRevealed(false);
       return;
     }
 
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReduced) {
-      setListRevealed(true);
-      return;
-    }
-
-    const id = window.setTimeout(() => setListRevealed(true), REVEAL_DELAY_MS);
+    const id = window.setTimeout(() => setListRevealed(true), prefersReduced ? 0 : REVEAL_DELAY_MS);
     return () => window.clearTimeout(id);
   }, [active]);
 
