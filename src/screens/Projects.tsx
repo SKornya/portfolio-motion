@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useState } from 'react';
 import { ProjectCard } from '../components/ProjectCard';
 import { projects, type Project } from '../data/content';
 import styles from './Projects.module.less';
@@ -10,11 +10,11 @@ type Props = {
 };
 
 export function Projects({ cardIndex, active, onWatch }: Props) {
-  const storedIndex = useRef(0);
-  if (active) {
-    storedIndex.current = cardIndex;
+  // Keep the last card while another screen owns `step`
+  const [shownIndex, setShownIndex] = useState(0);
+  if (active && cardIndex !== shownIndex) {
+    setShownIndex(cardIndex);
   }
-  const shownIndex = storedIndex.current;
 
   return (
     <section className={styles.screen} aria-label="Проекты">

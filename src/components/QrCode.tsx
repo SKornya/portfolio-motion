@@ -26,7 +26,7 @@ function serviceImage(href: string, label: string) {
   if (key.includes('t.me') || key.includes('telegram')) {
     return icons.telegram;
   }
-  if (key.includes('vk.com') || key.includes('vk')) {
+  if (key.includes('vk')) {
     return icons.vk;
   }
   return undefined;

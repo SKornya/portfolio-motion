@@ -58,8 +58,8 @@ export function Contacts({ open }: Props) {
           </div>
         </div>
         <div className={styles.icons}>
-          {images.contacts.map((src, index) => (
-            <img key={src} className={styles.icon} src={src} alt="" aria-hidden={index > 0} />
+          {images.contacts.map((src) => (
+            <img key={src} className={styles.icon} src={src} alt="" />
           ))}
         </div>
       </div>
