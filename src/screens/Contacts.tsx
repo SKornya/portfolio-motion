@@ -21,7 +21,7 @@ export function Contacts({ open }: Props) {
       className={`${styles.drawer} ${open ? styles.open : ''}`}
       aria-labelledby="contacts-title"
     >
-      <div className={styles.panel}>
+      <div className={styles.panel} data-scrollable>
         <div className={styles.grid}>
           <div>
             <h2 className={styles.heading}>{contacts.socialTitle}</h2>

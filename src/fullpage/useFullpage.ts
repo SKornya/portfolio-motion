@@ -10,6 +10,20 @@ const INTERACTIVE = 'a, button, input, textarea, select, [contenteditable]';
 const TOUCH_IGNORE = 'a, button, input, textarea, video, iframe, [role="dialog"]';
 const WHEEL_IGNORE = '[role="dialog"]';
 
+/** Overflowing `[data-scrollable]` areas scroll themselves; the wheel chains to paging at their edges. */
+function scrollsNatively(event: Event, target: Element) {
+  const area = target.closest<HTMLElement>('[data-scrollable]');
+  if (!area || area.scrollHeight <= area.clientHeight) {
+    return false;
+  }
+  if (event instanceof WheelEvent) {
+    return event.deltaY < 0
+      ? area.scrollTop > 0
+      : area.scrollTop + area.clientHeight < area.scrollHeight - 1;
+  }
+  return true;
+}
+
 type Options = {
   locked: boolean;
 };
@@ -191,7 +205,10 @@ export function useFullpage({ locked }: Options) {
       // pages from anywhere, including over buttons.
       ignoreCheck: (event, isTouch) => {
         const target = event.target as Element | null;
-        return Boolean(target?.closest?.(isTouch ? TOUCH_IGNORE : WHEEL_IGNORE));
+        if (!target?.closest) {
+          return false;
+        }
+        return Boolean(target.closest(isTouch ? TOUCH_IGNORE : WHEEL_IGNORE)) || scrollsNatively(event, target);
       },
       onChangeY: (self) => {
         consume(self.deltaY, self.event?.type === 'wheel');
