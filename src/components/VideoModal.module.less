@@ -45,11 +45,6 @@
   color: fade(@color-text, 80%);
 }
 
-.empty a {
-  color: @color-text;
-  text-decoration: underline;
-}
-
 .close {
   position: absolute;
   top: 12px;
@@ -64,7 +59,7 @@
   line-height: 1;
 }
 
-@media (max-width: 720px) {
+@media (max-width: @bp-mobile) {
   .backdrop {
     padding: 0;
     padding-top: env(safe-area-inset-top, 0px);

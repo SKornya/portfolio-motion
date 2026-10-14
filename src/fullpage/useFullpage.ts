@@ -6,6 +6,24 @@ import { getAppHeight, subscribeAppHeight } from './appHeight';
 
 gsap.registerPlugin(Observer);
 
+const INTERACTIVE = 'a, button, input, textarea, select, [contenteditable]';
+const TOUCH_IGNORE = 'a, button, input, textarea, video, [role="dialog"]';
+const WHEEL_IGNORE = '[role="dialog"]';
+
+/** Overflowing `[data-scrollable]` areas scroll themselves; the wheel chains to paging at their edges. */
+function scrollsNatively(event: Event, target: Element) {
+  const area = target.closest<HTMLElement>('[data-scrollable]');
+  if (!area || area.scrollHeight <= area.clientHeight) {
+    return false;
+  }
+  if (event instanceof WheelEvent) {
+    return event.deltaY < 0
+      ? area.scrollTop > 0
+      : area.scrollTop + area.clientHeight < area.scrollHeight - 1;
+  }
+  return true;
+}
+
 type Options = {
   locked: boolean;
 };
@@ -133,8 +151,20 @@ export function useFullpage({ locked }: Options) {
   }, [goTo, trackOffset]);
 
   useEffect(() => {
-    // While the video modal is open, do not capture wheel/touch — otherwise
-    // Google Drive's iframe never receives play/scrub gestures on mobile.
+    // Off-screen sections must not take focus: focusing them scrolls the
+    // overflow-hidden viewport and desyncs it from the track transform.
+    const track = trackRef.current;
+    if (!track) {
+      return;
+    }
+    Array.from(track.children).forEach((screen, screenIndex) => {
+      screen.toggleAttribute('inert', screenIndex !== index);
+    });
+  }, [index]);
+
+  useEffect(() => {
+    // While a media overlay is open, do not capture wheel/touch — its own
+    // controls (scrubbing, swiping, zoom) need the gestures.
     if (locked) {
       return;
     }
@@ -171,7 +201,15 @@ export function useFullpage({ locked }: Options) {
       wheelSpeed: -1,
       tolerance: 12,
       preventDefault: true,
-      ignore: 'a, button, input, textarea, video, iframe, [role="dialog"]',
+      // Touches on controls are left alone so taps stay reliable; the wheel
+      // pages from anywhere, including over buttons.
+      ignoreCheck: (event, isTouch) => {
+        const target = event.target as Element | null;
+        if (!target?.closest) {
+          return false;
+        }
+        return Boolean(target.closest(isTouch ? TOUCH_IGNORE : WHEEL_IGNORE)) || scrollsNatively(event, target);
+      },
       onChangeY: (self) => {
         consume(self.deltaY, self.event?.type === 'wheel');
       },
@@ -179,6 +217,10 @@ export function useFullpage({ locked }: Options) {
 
     const onKey = (event: KeyboardEvent) => {
       if (busyRef.current) {
+        return;
+      }
+      // Space must still activate the focused button or link
+      if (event.key === ' ' && (event.target as Element | null)?.closest?.(INTERACTIVE)) {
         return;
       }
       if (['ArrowDown', 'PageDown', ' '].includes(event.key)) {

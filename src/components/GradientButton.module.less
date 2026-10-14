@@ -89,7 +89,7 @@
   transform: scale(1.16);
 }
 
-@media (max-width: 720px) {
+@media (max-width: @bp-mobile) {
   .button {
     border-color: transparent;
   }
@@ -131,7 +131,7 @@
   }
 }
 
-@media (max-width: 720px) and (prefers-reduced-motion: reduce) {
+@media (max-width: @bp-mobile) and (prefers-reduced-motion: reduce) {
   .button::before {
     animation: none;
     background-position: 50% 50%;

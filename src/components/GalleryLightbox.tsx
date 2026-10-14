@@ -21,7 +21,7 @@ export function GalleryLightbox({ gallery, onClose }: Props) {
     <Lightbox
       open={Boolean(gallery)}
       close={onClose}
-      slides={(gallery?.images ?? []).map((src) => ({ src }))}
+      slides={(gallery?.images ?? []).map((src, index) => ({ src, alt: `${gallery?.title} — ${index + 1}` }))}
       carousel={{ finite: false }}
       controller={{ closeOnBackdropClick: true }}
       plugins={[Thumbnails, Zoom, Counter]}

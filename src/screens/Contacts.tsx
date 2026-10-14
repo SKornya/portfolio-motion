@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { images } from '../assets/media';
 import { QrCode } from '../components/QrCode';
 import { contacts } from '../data/content';
@@ -8,13 +9,19 @@ type Props = {
 };
 
 export function Contacts({ open }: Props) {
+  const drawerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    drawerRef.current?.toggleAttribute('inert', !open);
+  }, [open]);
+
   return (
     <aside
+      ref={drawerRef}
       className={`${styles.drawer} ${open ? styles.open : ''}`}
       aria-labelledby="contacts-title"
-      aria-hidden={!open}
     >
-      <div className={styles.panel}>
+      <div className={styles.panel} data-scrollable>
         <div className={styles.grid}>
           <div>
             <h2 className={styles.heading}>{contacts.socialTitle}</h2>
@@ -51,8 +58,8 @@ export function Contacts({ open }: Props) {
           </div>
         </div>
         <div className={styles.icons}>
-          {images.contacts.map((src, index) => (
-            <img key={src} className={styles.icon} src={src} alt="" aria-hidden={index > 0} />
+          {images.contacts.map((src) => (
+            <img key={src} className={styles.icon} src={src} alt="" />
           ))}
         </div>
       </div>

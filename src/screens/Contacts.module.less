@@ -28,6 +28,7 @@
   border-radius: @radius-section @radius-section 0 0;
   color: @color-text-muted;
   overflow: auto;
+  overscroll-behavior: contain;
 }
 
 .grid {
@@ -41,7 +42,7 @@
 
 .heading {
   margin-bottom: 16px;
-  font-family: @font-display-title;
+  font-family: @font-display;
   font-size: 24px;
   font-weight: 900;
   letter-spacing: 0.04em;
@@ -89,7 +90,7 @@
   height: auto;
 }
 
-@media (max-width: 720px) {
+@media (max-width: @bp-mobile) {
   .drawer {
     height: auto;
     max-height: min(68vh, 520px);
@@ -97,6 +98,8 @@
 
   .panel {
     height: auto;
+    /* the panel, not the drawer, must hit the cap so its content can scroll */
+    max-height: min(68vh, 520px);
     padding: 20px 20px 10px;
     padding-bottom: max(10px, env(safe-area-inset-bottom, 0px));
     border-radius: 28px 28px 0 0;

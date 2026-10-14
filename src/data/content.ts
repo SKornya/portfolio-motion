@@ -4,18 +4,17 @@ export type ScreenId = 'hero' | 'works' | 'about' | 'skills' | 'projects' | 'sho
 
 export type ScreenDef = {
   id: ScreenId;
-  hash: string;
   theme: 'dark' | 'light';
   steps: number;
 };
 
 export const screens: ScreenDef[] = [
-  { id: 'hero', hash: 'hero', theme: 'dark', steps: 1 },
-  { id: 'works', hash: 'works', theme: 'dark', steps: 1 },
-  { id: 'about', hash: 'about', theme: 'dark', steps: 1 },
-  { id: 'skills', hash: 'skills', theme: 'light', steps: 1 },
-  { id: 'projects', hash: 'projects', theme: 'dark', steps: 4 },
-  { id: 'showreel', hash: 'showreel', theme: 'dark', steps: 2 },
+  { id: 'hero', theme: 'dark', steps: 1 },
+  { id: 'works', theme: 'dark', steps: 1 },
+  { id: 'about', theme: 'dark', steps: 1 },
+  { id: 'skills', theme: 'light', steps: 1 },
+  { id: 'projects', theme: 'dark', steps: 4 },
+  { id: 'showreel', theme: 'dark', steps: 2 },
 ];
 
 export const navItems = [
@@ -149,7 +148,7 @@ export function resolveHash(hash: string): { index: number; step: number } {
     const projectsIndex = screens.findIndex((screen) => screen.id === 'projects');
     return { index: projectsIndex, step: Math.max(0, Number(projectMatch[1]) - 1) };
   }
-  const index = screens.findIndex((screen) => screen.hash === clean);
+  const index = screens.findIndex((screen) => screen.id === clean);
   return { index: index >= 0 ? index : 0, step: 0 };
 }
 
@@ -164,5 +163,5 @@ export function hashFor(index: number, step: number): string {
   if (screen.id === 'projects') {
     return step > 0 ? `project-${step + 1}` : 'projects';
   }
-  return screen.hash;
+  return screen.id;
 }

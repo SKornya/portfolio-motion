@@ -1,5 +1,4 @@
 @font-display: 'Tilda Sans', system-ui, sans-serif;
-@font-display-title: 'Tilda Sans', system-ui, sans-serif;
 @font-body: 'Inter', system-ui, sans-serif;
 
 @color-bg-dark: #1c1c1c;
@@ -39,14 +38,14 @@
   width: max-content;
   max-width: 92vw;
   margin: 0;
-  font-family: @font-display-title;
+  font-family: @font-display;
   font-weight: 900;
   letter-spacing: -0.03em;
   line-height: 1;
   text-align: center;
   white-space: nowrap;
 
-  @media (max-width: 720px) {
+  @media (max-width: @bp-mobile) {
     .clamp-title(36px, 11vw, 52px);
     max-width: calc(100vw - 32px);
     white-space: normal;
@@ -67,7 +66,7 @@
   max-width: 92vw;
   transform: translateX(-50%);
 
-  @media (max-width: 720px) {
+  @media (max-width: @bp-mobile) {
     top: min(@top, 72px);
     max-width: calc(100vw - 32px);
   }
